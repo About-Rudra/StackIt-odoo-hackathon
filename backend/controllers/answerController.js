@@ -70,6 +70,29 @@ const acceptAnswer = async (req, res) => {
   }
 };
 
+/**
+ * GET /api/questions/:id/answers
+ * Fetch all answers for a specific question
+ */
+const getAnswersByQuestion = async (req, res) => {
+  const questionId = req.params.id;
+
+  try {
+    const result = await db.query(
+      `SELECT a.id, a.description, a.is_accepted, a.created_at, u.username
+       FROM answers a
+       JOIN users u ON a.user_id = u.id
+       WHERE a.question_id = $1
+       ORDER BY a.created_at ASC`,
+      [questionId]
+    );
+
+    res.json({ answers: result.rows });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch answers", error: err.message });
+  }
+};
+
 // ✅ Export both
 module.exports = {
   postAnswer,

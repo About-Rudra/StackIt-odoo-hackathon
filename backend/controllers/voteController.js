@@ -10,7 +10,7 @@ exports.voteAnswer = async (req, res) => {
   }
 
   try {
-    // Check if user already voted
+    // Check if user already votedVote
     const existing = await db.query(
       `SELECT * FROM votes WHERE user_id = $1 AND answer_id = $2`,
       [userId, answer_id]
